@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Software Especializado</title>
+  <!-- FONT AWESOME -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root{
+      --azul:#007bff;
+      --azul-80: rgba(0,123,255,.8);
+      --azul-50: rgba(0,123,255,.5);
+      --azul-40: rgba(0,123,255,.4);
+      --texto:#333;
+      --blanco:#fff;
+      --gris-fondo:#f4f4f4;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: var(--gris-fondo);
+      color: var(--texto);
+    }
+
+    /* NAVBAR FIJO CON LOGO (semitransparente) */
+    nav {
+      background-color: var(--azul-80);
+      -webkit-backdrop-filter: blur(6px);
+      backdrop-filter: blur(6px);
+      padding: 10px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+    }
+    nav img {
+      height: 70px;
+    }
+    nav .nav-links {
+      display:flex; flex-wrap:wrap; align-items:center; gap:18px;
+    }
+    nav .nav-links a {
+      color: var(--blanco);
+      text-decoration: none;
+      font-weight: bold;
+      padding: 8px 6px;
+    }
+    nav .nav-links a:hover { text-decoration: underline; }
+
+    /* Empuje para que el contenido no quede bajo el nav */
+    .spacer{ height: 90px; }
+
+    /* HERO CON IMAGEN Y DEGRADADO (más transparencia y texto blanco) */
+    section.hero {
+      background:
+        linear-gradient(var(--azul-50), var(--azul-50)),
+        url("https://res.cloudinary.com/drr7ejjsy/image/upload/v1756484678/annie-spratt-QckxruozjRg-unsplash_2_degssg.jpg")
+        no-repeat center center/cover;
+      padding: 120px 20px;
+      text-align: center;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      color: var(--blanco); /* todo el texto del hero en blanco */
+    }
+    .hero h1 {
+      font-size: 2.8em;
+      margin-bottom: 20px;
+      color: var(--blanco);
+      text-shadow: 0 2px 6px rgba(0,0,0,.25);
+    }
+    .hero p {
+      font-size: 1.3em;
+      color: var(--blanco);
+      max-width: 900px;
+      margin: 0 auto;
+      text-shadow: 0 1px 4px rgba(0,0,0,.25);
+    }
+
+    /* ABOUT */
+    section.about {
+      padding: 40px 20px;
+      text-align: center;
+      background-color: #fafafa;
+    }
+
+    /* SERVICIOS */
+    section.features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      background-color: white;
+    }
+    .feature {
+      flex: 1 1 250px;
+      max-width: 300px;
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      background-color: #fafafa;
+      transition: transform 0.3s, box-shadow .3s;
+    }
+    .feature:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    .feature i {
+      font-size: 40px;
+      color: var(--azul);
+      margin-bottom: 15px;
+    }
+
+    /* ELEGIRNOS */
+    #elegirnos {
+      background-color: #fdfdfd;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    #elegirnos .section-title h3 {
+      font-size: 2em;
+      color: var(--azul);
+      margin-bottom: 10px;
+    }
+    #elegirnos .section-title p {
+      font-size: 1.1em;
+      margin-bottom: 40px;
+      color: #777;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    .feature-item {
+      background: #fafafa;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+    }
+    .feature-item:hover { transform: translateY(-8px); }
+    .feature-icon {
+      font-size: 40px;
+      color: var(--azul);
+      margin-bottom: 15px;
+    }
+    .feature-content h4 { margin-bottom: 10px; color: #222; }
+    .feature-content p { color: #555; font-size: 0.95em; }
+
+    /* PROYECTOS */
+    #proyectos {
+      background-color: #fafafa;
+      padding: 60px 20px;
+      text-align: center;
+    }
+    #proyectos .section-title h3 {
+      font-size: 2em;
+      color: var(--azul);
+      margin-bottom: 10px;
+    }
+    #proyectos .section-title p {
+      font-size: 1.1em;
+      margin-bottom: 40px;
+      color: #555;
+    }
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    .project-card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 25px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+      transition: transform 0.3s;
+      text-align: left;
+    }
+    .project-card:hover { transform: translateY(-8px); }
+    .project-image {
+      font-size: 45px;
+      color: var(--azul);
+      margin-bottom: 15px;
+      text-align: center;
+    }
+    .project-content h4 { margin: 10px 0; color: #222; }
+    .project-content p { color: #555; font-size: 0.95em; margin-bottom: 15px; }
+    .project-tech { margin-bottom: 15px; }
+    .tech-tag {
+      display: inline-block;
+      background: var(--azul);
+      color: #fff;
+      font-size: 0.8em;
+      padding: 5px 10px;
+      border-radius: 15px;
+      margin: 3px;
+    }
+    .cta-button {
+      display: inline-block;
+      padding: 10px 15px;
+      background: var(--azul);
+      color: #fff;
+      border-radius: 5px;
+      text-decoration: none;
+      font-size: 0.9em;
+    }
+    .cta-button:hover { background: #0056b3; }
+
+    /* TEAM */
+    section.team {
+      padding: 50px 20px;
+      background-color: #ffffff;
+      text-align: center;
+    }
+    .team h2 {
+      font-size: 2em;
+      margin-bottom: 30px;
+      color: #222;
+    }
+    .team-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+    }
+    .team-member {
+      background: #fafafa;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 200px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .team-member img {
+      width: 150px;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin-bottom: 15px;
+    }
+    .team-member h3 {
+      margin: 10px 0 5px;
+      color: var(--azul);
+    }
+    .team-member p { font-size: 0.9em; color: #555; }
+
+    /* FORMULARIO */
+    section.formulario {
+      padding: 40px 20px;
+      background-color: #f9f9f9;
+      text-align: center;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+    input, textarea, button {
+      padding: 10px;
+      font-size: 1em;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: var(--azul);
+      color: white;
+      cursor: pointer;
+      border: none;
+    }
+    button:hover { background-color: #0056b3; }
+
+    /* FOOTER */
+    footer {
+      background-color: #222;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    footer a {
+      color: white;
+      margin: 0 10px;
+      text-decoration: none;
+    }
+    footer a:hover { text-decoration: underline; }
+
+    /* Responsivo básico */
+    @media (max-width: 768px){
+      nav img{ height: 58px; }
+      .spacer{ height: 82px; }
+      .hero h1{ font-size: 2.2em; }
+      .hero p{ font-size: 1.05em; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <img src="https://res.cloudinary.com/drr7ejjsy/image/upload/v1756320965/logoblanco_xbbddw.png" alt="Logo Software Especializado">
+    <div class="nav-links">
+      <a href="#inicio">Inicio</a>
+      <a href="#about">Quiénes Somos</a>
+      <a href="#features">Servicios</a>
+      <a href="#elegirnos">¿Por qué elegirnos?</a>
+      <a href="#proyectos">Proyectos</a>
+      <a href="#team">Equipo</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+  </nav>
+  <div class="spacer" aria-hidden="true"></div>
+
+  <!-- HERO -->
+  <section class="hero" id="inicio">
+    <h1>Soluciones de Software a tu Medida</h1>
+    <p>Desarrollamos herramientas digitales adaptadas a las necesidades específicas de tu empresa.</p>
+  </section>
+
+  <!-- QUIÉNES SOMOS -->
+  <section class="about" id="about">
+    <h2>¿Quiénes Somos?</h2>
+    <p>Somos un equipo dedicado a la confección de software a medida. 
+       Nuestra misión es brindar seguridad, confianza y soluciones innovadoras 
+       para garantizar la satisfacción de cada uno de nuestros clientes.</p>
+  </section>
+
+  <!-- SERVICIOS -->
+  <section class="features" id="features">
+    <div class="feature">
+      <i class="fas fa-cogs"></i>
+      <h3>Automatización</h3>
+      <p>Optimiza tus procesos con software que automatiza tareas repetitivas.</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-headset"></i>
+      <h3>Soporte Personalizado</h3>
+      <p>Atención técnica y asesoría dedicada para cada cliente.</p>
+    </div>
+    <div class="feature">
+      <i class="fas fa-chart-line"></i>
+      <h3>Escalabilidad</h3>
+      <p>Soluciones que crecen contigo y se adaptan al ritmo de tu negocio.</p>
+    </div>
+  </section>
+
+  <!-- POR QUÉ ELEGIRNOS -->
+  <section id="elegirnos">
+    <div class="section-title">
+      <h3>¿Por qué elegirnos?</h3>
+      <p>Nuestro enfoque centrado en el cliente nos distingue de la competencia</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-item"><div class="feature-icon"><i class="fas fa-rocket"></i></div><div class="feature-content"><h4>Tecnología de Vanguardia</h4><p>Utilizamos las últimas herramientas, lenguajes y frameworks para ofrecer soluciones robustas, seguras y escalables.</p></div></div>
+      <div class="feature-item"><div class="feature-icon"><i class="fas fa-sliders-h"></i></div><div class="feature-content"><h4>Personalización y Adaptación</h4><p>Cada proyecto se ajusta a tus necesidades específicas, asegurando que el software se integre perfectamente a tus flujos de trabajo.</p></div></div>
+      <div class="feature-item"><div class="feature-icon"><i class="fas fa-shield-alt"></i></div><div class="feature-content"><h4>Seguridad Garantizada</h4><p>Implementamos los más altos estándares de seguridad para proteger tus datos y los de tus clientes.</p></div></div>
+      <div class="feature-item"><div class="feature-icon"><i class="fas fa-users"></i></div><div class="feature-content"><h4>Equipo Experto</h4><p>Contamos con profesionales certificados y con amplia experiencia en desarrollo de software.</p></div></div>
+      <div class="feature-item"><div class="feature-icon"><i class="fas fa-clock"></i></div><div class="feature-content"><h4>Entregas a Tiempo</h4><p>Cumplimos con los plazos establecidos gracias a nuestra metodología ágil de trabajo.</p></div></div>
+    </div>
+  </section>
+
+  <!-- PROYECTOS -->
+  <section id="proyectos">
+    <div class="section-title">
+      <h3>Proyectos Recientes</h3>
+      <p>Algunos de los trabajos que hemos desarrollado para nuestros clientes</p>
+    </div>
+    <div class="projects-grid">
+      <div class="project-card">
+        <div class="project-image"><i class="fas fa-shopping-cart"></i></div>
+        <div class="project-content">
+          <h4>Sistema de E-commerce</h4>
+          <p>Plataforma de comercio electrónico personalizada con integración de pagos, gestión de inventario y análisis de ventas.</p>
+          <div class="project-tech"><span class="tech-tag">React</span><span class="tech-tag">Node.js</span><span class="tech-tag">MongoDB</span><span class="tech-tag">Stripe</span></div>
+          <a href="#" class="cta-button">Ver caso de estudio</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-image"><i class="fas fa-chart-line"></i></div>
+        <div class="project-content">
+          <h4>Dashboard Analítico</h4>
+          <p>Solución de business intelligence para visualizar datos empresariales en tiempo real con reportes personalizables.</p>
+          <div class="project-tech"><span class="tech-tag">Vue.js</span><span class="tech-tag">Python</span><span class="tech-tag">PostgreSQL</span><span class="tech-tag">D3.js</span></div>
+          <a href="#" class="cta-button">Ver caso de estudio</a>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-image"><i class="fas fa-mobile-alt"></i></div>
+        <div class="project-content">
+          <h4>Aplicación Móvil Educativa</h4>
+          <p>Aplicación de aprendizaje interactivo con lecciones personalizadas, seguimiento de progreso y gamificación.</p>
+          <div class="project-tech"><span class="tech-tag">React Native</span><span class="tech-tag">Firebase</span><span class="tech-tag">Redux</span><span class="tech-tag">AWS</span></div>
+          <a href="#" class="cta-button">Ver caso de estudio</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EQUIPO -->
+  <section class="team" id="team">
+    <h2>Nuestro Equipo</h2>
+    <div class="team-container">
+      <div class="team-member"><img src="https://res.cloudinary.com/drr7ejjsy/image/upload/v1756477612/WhatsApp_Image_2025-08-27_at_7.35.23_PM_a8jjt6.jpg" alt="Foto miembro 1"><h3>Ruben Chirino</h3><p>Programador</p></div>
+      <div class="team-member"><img src="https://res.cloudinary.com/drr7ejjsy/image/upload/v1756477613/WhatsApp_Image_2025-08-27_at_7.23.54_PM_cu40dp.jpg" alt="Foto miembro 2"><h3>Alexis Cuevas</h3><p>Especialista en software</p></div>
+      <div class="team-member"><img src="https://res.cloudinary.com/drr7ejjsy/image/upload/v1756480322/WhatsApp_Image_2025-08-29_at_11.06.45_AM_ax9u2j.jpg" alt="Foto miembro 3"><h3>Alex Ahumada</h3><p>Encargado de Marketing</p></div>
+      <div class="team-member"><img src="https://res.cloudinary.com/drr7ejjsy/image/upload/v1756480322/WhatsApp_Image_2025-08-29_at_11.10.55_AM_naizhb.jpg" alt="Foto miembro 4"><h3>Matias Lopez</h3><p>Programador Web</p></div>
+    </div>
+  </section>
+
+  <!-- FORMULARIO -->
+  <section class="formulario" id="contacto">
+    <h2>Agenda una Reunión</h2>
+    <p>Completa el siguiente formulario y nos pondremos en contacto contigo.</p>
+    <form action="mailto:tuemail@empresa.com" method="post" enctype="text/plain">
+      <input type="text" name="nombre" placeholder="Tu Nombre" required>
+      <input type="number" name="telefono" placeholder="Ingresa tu telefono" required>
+      <input type="email" name="email" placeholder="Tu Correo" required>
+      <input type="date" name="fecha" required>
+      <textarea name="mensaje" placeholder="Escribe tu mensaje" rows="4"></textarea>
+      <button type="submit">Enviar Solicitud</button>
+    </form>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>&copy; 2025 Software Especializado. Todos los derechos reservados.</p>
+    <a href="https://web.facebook.com/profile.php?id=61579317232811" target="_blank" rel="noopener">Facebook</a> |
+    <a href="https://www.instagram.com/software_especializado/" target="_blank" rel="noopener">Instagram</a>
+  </footer>
+
+</body>
+</html>
