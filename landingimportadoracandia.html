@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Importadora Candia — Venta Mayorista y Detalle</title>
+
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    :root{
+      --primary:#0a4f82;           /* azul Candia */
+      --primary-90:rgba(10,79,130,.90);
+      --primary-70:rgba(10,79,130,.70);
+      --accent:#0b0b0b;            /* (se mantiene para footer) */
+      --text:#1b1b1b;
+      --muted:#6b7280;
+      --bg:#f5f6f8;
+      --white:#fff;
+      --radius:14px;
+      --shadow:0 10px 30px rgba(0,0,0,.08);
+      --input:#e5e7eb;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:"Poppins",system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial,sans-serif;
+      color:var(--text);
+      background:var(--bg);
+    }
+
+    /* Barra anuncio superior (no fija) */
+    .topbar{
+      background:var(--primary);
+      color:#fff; text-align:center; font-size:.9rem; letter-spacing:.3px;
+      padding:8px 12px;
+    }
+
+    /* Header fijo (navbar) */
+    .header{
+      position:fixed; top:0; left:0; width:100%; z-index:1000;
+      background:var(--primary); /* azul corporativo */
+      border-bottom:1px solid rgba(255,255,255,.1);
+      box-shadow:0 4px 10px rgba(0,0,0,.1);
+    }
+    .nav{
+      max-width:1200px; margin:0 auto; padding:14px 20px;
+      display:flex; align-items:center; gap:18px; justify-content:space-between;
+    }
+    .brand img{height:70px} /* logo más grande */
+    .nav-links{display:flex; gap:22px; align-items:center}
+    .nav a{color:#fff; text-decoration:none; font-weight:600; opacity:.95}
+    .nav a:hover{opacity:1}
+
+    .btn{
+      display:inline-flex; align-items:center; gap:10px;
+      border:0; border-radius:999px; padding:12px 18px; font-weight:700;
+      transition:.2s transform ease, .2s box-shadow ease, .2s background ease;
+      text-decoration:none; font-size:1rem; cursor:pointer;
+    }
+    .btn-primary{background:#ffffff; color:var(--primary); box-shadow:0 10px 24px rgba(255,255,255,.15)}
+    .btn-primary:hover{transform:translateY(-1px); box-shadow:0 14px 28px rgba(255,255,255,.25)}
+    .btn-outline{background:transparent; color:#fff; border:2px solid rgba(255,255,255,.9)}
+    .btn-outline:hover{background:rgba(255,255,255,.08)}
+
+    /* Empuje para que el contenido no quede tapado por el header fijo */
+    .spacer{ height:114px; } /* aprox. alto topbar + header */
+
+    /* HERO */
+    .hero{
+      background:
+        linear-gradient(180deg, rgba(0,0,0,.55), rgba(0,0,0,.65)),
+        url("https://images.unsplash.com/photo-1542362567-b07e54358753?q=80&w=2000&auto=format&fit=crop") center/cover no-repeat;
+      color:#fff;
+    }
+    .hero-inner{
+      max-width:1200px; margin:0 auto; padding:90px 18px 120px;
+      text-align:center;
+    }
+    .hero h1{
+      font-size:clamp(32px,5vw,56px);
+      line-height:1.1; margin:14px 0 10px; font-weight:800;
+      text-shadow:0 6px 20px rgba(0,0,0,.35);
+    }
+    .hero p{
+      font-size:clamp(16px,2.2vw,20px);
+      color:#f1f5f9; opacity:.95; margin:0 auto 26px; max-width:900px;
+      text-shadow:0 3px 12px rgba(0,0,0,.3);
+    }
+    .cta-row{display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+
+    /* SECCIONES */
+    .section{max-width:1200px; margin:0 auto; padding:56px 18px}
+    .section h2{
+      font-size:clamp(22px,3.2vw,32px); margin:0 0 18px; color:#0c3150; font-weight:800;
+    }
+    .underline{width:86px; height:3px; background:var(--primary); border-radius:2px; margin:6px 0 26px}
+
+    /* Categorías circulares */
+    .cat-grid{
+      display:grid; gap:24px;
+      grid-template-columns:repeat(5,minmax(160px,1fr));
+    }
+    @media (max-width:1100px){ .cat-grid{grid-template-columns:repeat(4,1fr)} }
+    @media (max-width:900px){ .cat-grid{grid-template-columns:repeat(3,1fr)} }
+    @media (max-width:640px){ .cat-grid{grid-template-columns:repeat(2,1fr)} }
+    .cat{
+      background:#fff; border-radius:var(--radius); padding:18px 14px;
+      box-shadow:var(--shadow); text-align:center;
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .cat:hover{transform:translateY(-4px); box-shadow:0 14px 38px rgba(0,0,0,.10)}
+    .cat .thumb{
+      width:140px; height:140px; margin:0 auto 10px; border-radius:999px; overflow:hidden;
+      border:4px solid rgba(10,79,130,.15);
+    }
+    .cat .thumb img{width:100%; height:100%; object-fit:cover}
+    .cat h3{font-size:1rem; letter-spacing:.5px; margin:6px 0 4px}
+    .cat small{color:var(--muted)}
+
+    /* Beneficios */
+    .benefits{
+      display:grid; gap:22px; margin-top:28px;
+      grid-template-columns:repeat(4,1fr);
+    }
+    @media (max-width:900px){ .benefits{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:520px){ .benefits{grid-template-columns:1fr} }
+    .benefit{
+      display:flex; align-items:center; gap:14px; background:#fff; padding:16px 18px;
+      border-radius:var(--radius); box-shadow:var(--shadow);
+    }
+    .benefit i{font-size:28px; color:var(--primary)}
+    .benefit h4{margin:0 0 4px; font-size:1.02rem}
+    .benefit p{margin:0; font-size:.92rem; color:var(--muted)}
+
+    /* Banda de envíos */
+    .band{
+      background:linear-gradient( to right, var(--primary-90), var(--primary-70) ), url("https://images.unsplash.com/photo-1449452198679-05c7fd30f416?q=80&w=2000&auto=format&fit=crop") center/cover;
+      color:#fff; border-radius:var(--radius); padding:26px; display:flex; align-items:center; justify-content:space-between; gap:14px;
+      box-shadow:var(--shadow);
+    }
+    @media (max-width:840px){ .band{flex-direction:column; text-align:center} }
+    .band h3{margin:0; font-size:clamp(18px,2.6vw,24px)}
+    .band p{margin:0; opacity:.95}
+
+    /* Testimonios */
+    .testis{display:grid; gap:20px; grid-template-columns:repeat(3,1fr)}
+    @media (max-width:980px){ .testis{grid-template-columns:repeat(2,1fr)} }
+    @media (max-width:640px){ .testis{grid-template-columns:1fr} }
+    .card{background:#fff; border-radius:var(--radius); padding:22px; box-shadow:var(--shadow)}
+    .stars{color:#ffb703; margin-bottom:8px}
+    .who{display:flex; align-items:center; gap:12px; margin-top:12px}
+    .who img{width:42px; height:42px; border-radius:999px; object-fit:cover}
+
+    /* Contacto */
+    .contact-wrap{
+      background:#fff; border-radius:var(--radius); box-shadow:var(--shadow);
+      padding:22px; max-width:760px; margin:0 auto;
+    }
+    .form-grid{display:grid; gap:16px; grid-template-columns:1fr 1fr}
+    @media (max-width:640px){ .form-grid{grid-template-columns:1fr} }
+    label span{display:block; font-weight:600; margin-bottom:6px}
+    input, textarea{
+      width:100%; padding:12px 14px; border:1px solid var(--input); border-radius:10px; font-size:1rem; font-family:inherit;
+      outline:none; background:#fff;
+    }
+    input:focus, textarea:focus{border-color:var(--primary); box-shadow:0 0 0 3px rgba(10,79,130,.12)}
+    textarea{min-height:140px; resize:vertical}
+    .btn-send{background:var(--primary); color:#fff; border:none; border-radius:10px; padding:14px 18px; font-weight:700; cursor:pointer}
+    .btn-send:hover{filter:brightness(1.05)}
+
+    /* Footer */
+    footer{
+      background:#0b0b0b; color:#dbe2ea; margin-top:48px; padding:26px 18px; text-align:center;
+      border-top:1px solid rgba(255,255,255,.06);
+    }
+    footer a{color:#e6f0ff; text-decoration:none}
+    footer a:hover{text-decoration:underline}
+
+    /* FAB WhatsApp */
+    .fab-whatsapp{
+      position:fixed; right:18px; bottom:18px; z-index:60;
+      width:58px; height:58px; border-radius:999px; background:#25D366; color:#fff;
+      display:flex; align-items:center; justify-content:center; font-size:28px;
+      box-shadow:0 12px 26px rgba(37,211,102,.4);
+    }
+    .fab-whatsapp:hover{filter:brightness(1.06)}
+  </style>
+</head>
+<body>
+
+  <!-- Barra superior -->
+  <div class="topbar">
+    <strong>VENTAS AL POR MAYOR</strong> • ENVÍOS A TODO CHILE POR <strong>STARKEN</strong>
+  </div>
+
+  <!-- Header fijo -->
+  <header class="header">
+    <nav class="nav">
+      <div class="brand">
+        <img src="https://res.cloudinary.com/drr7ejjsy/image/upload/v1756489311/Captura_de_pantalla_2025-08-29_133708_snreey.png" alt="Importadora Candia">
+      </div>
+      <div class="nav-links">
+        <a href="#categorias">Categorías</a>
+        <a href="#beneficios">Beneficios</a>
+        <a href="#contacto">Contacto</a>
+        <a class="btn btn-primary" href="https://importadoracandia.cl/tienda/" target="_blank" rel="noopener">
+          Ver productos
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Espaciador para evitar solapamiento con header fijo -->
+  <div class="spacer" aria-hidden="true"></div>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <h1>Productos Automotrices de Calidad,<br>Directo a tu Puerta</h1>
+      <p>Mayorista y detalle en <strong>anticongelantes, desengrasantes, refrigerantes, siliconas</strong> y más. Stock permanente y despacho rápido a todo Chile.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://importadoracandia.cl/tienda/" target="_blank" rel="noopener">
+          <i class="fa-solid fa-store"></i> Ver tienda
+        </a>
+        <a class="btn btn-outline" href="https://wa.me/56911111111?text=Hola%20Candia,%20quisiera%20lista%20de%20precios%20mayorista" target="_blank" rel="noopener">
+          <i class="fa-brands fa-whatsapp"></i> Lista mayorista
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categorías -->
+  <section class="section" id="categorias" aria-label="Categorías Destacadas">
+    <h2>Categorías Destacadas</h2>
+    <div class="underline"></div>
+
+    <div class="cat-grid">
+      <a class="cat" href="https://importadoracandia.cl/categoria-producto/anticongelantes/" target="_blank" rel="noopener">
+        <div class="thumb"><img src="https://res.cloudinary.com/drr7ejjsy/image/upload/v1756494598/anticongelante_dlfr3j.png" alt="Anticongelantes"></div>
+        <h3>ANTICONGELANTES</h3><small>Ver productos</small>
+      </a>
+      <a class="cat" href="https://importadoracandia.cl/categoria-producto/desengrasantes/" target="_blank" rel="noopener">
+        <div class="thumb"><img src="https://res.cloudinary.com/drr7ejjsy/image/upload/v1756494594/desengrasante_zs5y9e.jpg" alt="Desengrasantes"></div>
+        <h3>DESENGRASANTES</h3><small>Ver productos</small>
+      </a>
+      <a class="cat" href="https://importadoracandia.cl/categoria-producto/liquidos/" target="_blank" rel="noopener">
+        <div class="thumb"><img src="https://res.cloudinary.com/drr7ejjsy/image/upload/v1756494589/liquidos_urpnsd.png" alt="Líquidos"></div>
+        <h3>LÍQUIDOS</h3><small>Ver productos</small>
+      </a>
+      <a class="cat" href="https://importadoracandia.cl/categoria-producto/refrigerantes/" target="_blank" rel="noopener">
+        <div class="thumb"><img src="https://res.cloudinary.com/drr7ejjsy/image/upload/v1756494585/refrigerante_p4kltu.png" alt="Refrigerantes"></div>
+        <h3>REFRIGERANTES</h3><small>Ver productos</small>
+      </a>
+      <a class="cat" href="https://importadoracandia.cl/categoria-producto/siliconas-protectoras/" target="_blank" rel="noopener">
+        <div class="thumb"><img src="https://res.cloudinary.com/drr7ejjsy/image/upload/v1756494580/silicona_protectroa_rjrzcj.png" alt="Siliconas Protectoras"></div>
+        <h3>SILICONAS PROTECTORAS</h3><small>Ver productos</small>
+      </a>
+    </div>
+
+    <!-- Beneficios -->
+    <div class="benefits" id="beneficios" style="margin-top:36px">
+      <div class="benefit"><i class="fa-solid fa-credit-card"></i><div><h4>Pago Seguro</h4><p>Transacciones protegidas y comprobante inmediato.</p></div></div>
+      <div class="benefit"><i class="fa-solid fa-store"></i><div><h4>Abierto 24/7</h4><p>Compra en línea cuando quieras.</p></div></div>
+      <div class="benefit"><i class="fa-solid fa-headset"></i><div><h4>Asistencia Inmediata</h4><p>Soporte por WhatsApp y correo.</p></div></div>
+      <div class="benefit"><i class="fa-solid fa-shield-halved"></i><div><h4>Calidad Asegurada</h4><p>Marcas confiables y garantía.</p></div></div>
+    </div>
+  </section>
+
+  <!-- Banda Envíos -->
+  <section class="section" style="padding-top:0">
+    <div class="band">
+      <div>
+        <h3>Despachos a Todo Chile por Starken</h3>
+        <p>Preparación en 24–48h y seguimiento en línea de tu pedido.</p>
+      </div>
+      <a class="btn btn-outline" href="https://importadoracandia.cl/envios" target="_blank" rel="noopener">Conocer envíos</a>
+    </div>
+  </section>
+
+  <!-- Testimonios -->
+  <section class="section" aria-label="Testimonios de clientes">
+    <h2>Lo que dicen nuestros clientes</h2>
+    <div class="underline"></div>
+    <div class="testis">
+      <div class="card">
+        <div class="stars">★★★★★</div>
+        “Buena variedad y despacho rápido. Volveré a comprar.”
+        <div class="who"><img src="https://i.pravatar.cc/80?img=12" alt=""><strong>Claudio R.</strong></div>
+      </div>
+      <div class="card">
+        <div class="stars">★★★★★</div>
+        “Precios mayoristas reales y atención por WhatsApp al instante.”
+        <div class="who"><img src="https://i.pravatar.cc/80?img=23" alt=""><strong>Valentina M.</strong></div>
+      </div>
+      <div class="card">
+        <div class="stars">★★★★★</div>
+        “Los desengrasantes funcionan perfecto para mi taller.”
+        <div class="who"><img src="https://i.pravatar.cc/80?img=31" alt=""><strong>Diego S.</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section class="section" id="contacto" aria-label="Formulario de contacto">
+    <h2>Si tienes dudas, escríbenos.</h2>
+    <div class="underline"></div>
+
+    <div class="contact-wrap">
+      <form action="mailto:ventas@candiaimportadora.com" method="post" enctype="text/plain">
+        <div class="form-grid">
+          <label>
+            <span>Tu nombre</span>
+            <input type="text" name="nombre" placeholder="Ej: Juan Pérez" required>
+          </label>
+          <label>
+            <span>Tu correo electrónico</span>
+            <input type="email" name="correo" placeholder="ejemplo@correo.com" required>
+          </label>
+          <label>
+            <span>Tu número de teléfono</span>
+            <input type="tel" name="telefono" placeholder="+56 9 1234 5678" required>
+          </label>
+          <label>
+            <span>Asunto</span>
+            <input type="text" name="asunto" placeholder="Consulta sobre productos" required>
+          </label>
+        </div>
+        <label style="display:block; margin-top:16px">
+          <span>Tu mensaje (opcional)</span>
+          <textarea name="mensaje" placeholder="Escribe aquí tu consulta..."></textarea>
+        </label>
+        <div style="margin-top:16px; display:flex; gap:12px; align-items:center; flex-wrap:wrap">
+          <button type="submit" class="btn-send">ENVIAR</button>
+          <a class="btn btn-outline" href="https://wa.me/56911111111?text=Hola%20Candia,%20tengo%20una%20consulta" target="_blank" rel="noopener">
+            <i class="fa-brands fa-whatsapp"></i> WhatsApp
+          </a>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 Importadora Candia. Todos los derechos reservados.</p>
+    <p><a href="https://importadoracandia.cl/" target="_blank" rel="noopener">Ir a la tienda</a> • <a href="#contacto">Contacto</a></p>
+  </footer>
+
+  <!-- Botón WhatsApp flotante -->
+  <a class="fab-whatsapp" href="https://wa.me/56911111111?text=Hola%20Candia,%20quiero%20cotizar" target="_blank" rel="noopener" aria-label="WhatsApp">
+    <i class="fa-brands fa-whatsapp"></i>
+  </a>
+</body>
+</html>
